@@ -25,12 +25,6 @@ class TestCase(unittest.TestCase):
         trytond.tests.test_tryton.install_module('project_task_invoice')
 
 
-    def test0006depends(self):
-        '''
-        Test depends.
-        '''
-        test_depends()
-
 
 def doctest_dropdb(test):
     database = SQLiteDatabase().connect()
@@ -45,10 +39,6 @@ def doctest_dropdb(test):
 def suite():
     suite = trytond.tests.test_tryton.suite()
     suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
-    # TODO: remove if no scenario needed.
-    #suite.addTests(doctest.DocFileSuite('scenario_invoice.rst',
-    #        setUp=doctest_dropdb, tearDown=doctest_dropdb, encoding='utf-8',
-    #        optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
 
 if __name__ == '__main__':
