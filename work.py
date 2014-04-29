@@ -2,7 +2,8 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 
-from trytond.pool import PoolMeta, Pool
+from trytond.pool import PoolMeta
+from trytond.pyson import Eval, Not, Bool
 
 __metaclass__ = PoolMeta
 
@@ -19,6 +20,26 @@ class Work:
             del cls.project_invoice_method.states['required']
         if 'invisible' in cls.project_invoice_method.states:
             del cls.project_invoice_method.states['invisible']
+
+        expression = ((Eval('type') == 'project') & Not(Bool(Eval('parent'))))
+
+        if 'required' in cls.party.states:
+            cls.party.states['required'] |= expression
+        else:
+            cls.party.states['required'] = expression
+        if 'type' not in cls.party.depends:
+            cls.party.depends.append('type')
+        if 'parent' not in cls.party.depends:
+            cls.party.depends.append('parent')
+        if 'invisible' in cls.effort.states:
+            del cls.effort.states['invisible']
+
+        cls._buttons.update({
+                'invoice': {
+                    'invisible': (Eval('project_invoice_method', 'manual')
+                            == 'manual'),
+                    },
+                })
 
     def get_invoice_method(self, name):
         res = super(Work, self).get_invoice_method(name)
@@ -40,5 +61,3 @@ class Work:
                     continue
             lines += children._get_lines_to_invoice(test=test)
         return lines
-
-

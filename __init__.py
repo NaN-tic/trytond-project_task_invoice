@@ -6,4 +6,4 @@ from .work import *
 def register():
     Pool.register(
         Work,
-        module='project_task_invoice', type_='model')
+        module='project_invoice_task', type_='model')
