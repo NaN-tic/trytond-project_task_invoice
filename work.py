@@ -3,7 +3,7 @@
 # copyright notices and license terms.
 
 from trytond.pool import PoolMeta
-from trytond.pyson import Eval, Not, Bool
+from trytond.pyson import Eval
 
 __metaclass__ = PoolMeta
 
@@ -20,13 +20,11 @@ class Work:
             del cls.project_invoice_method.states['required']
         if 'invisible' in cls.project_invoice_method.states:
             del cls.project_invoice_method.states['invisible']
+        if 'invisible' in cls.party.states:
+            del cls.party.states['invisible']
 
-        expression = ((Eval('type') == 'project') & Not(Bool(Eval('parent'))))
-
-        if 'required' in cls.party.states:
-            cls.party.states['required'] |= expression
-        else:
-            cls.party.states['required'] = expression
+        if not 'required' in cls.party.states:
+            cls.party.states['required'] = True
         if 'type' not in cls.party.depends:
             cls.party.depends.append('type')
         if 'parent' not in cls.party.depends:
@@ -34,12 +32,28 @@ class Work:
         if 'invisible' in cls.effort.states:
             del cls.effort.states['invisible']
 
+        if not cls.party.on_change_with:
+            cls.party.on_change_with = []
+        cls.party.on_change_with.append('parent')
+
         cls._buttons.update({
                 'invoice': {
                     'invisible': (Eval('project_invoice_method', 'manual')
                             == 'manual'),
                     },
                 })
+
+    def get_party(self):
+        if self.parent and self.parent.party:
+            return self.parent.party.id
+
+        if self.parent:
+            return self.parent.get_project()
+
+        return
+
+    def on_change_with_party(self, name=None):
+        return self.get_party()
 
     def get_invoice_method(self, name):
         res = super(Work, self).get_invoice_method(name)
