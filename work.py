@@ -1,4 +1,4 @@
-#This file is part of project_task_invoice module for Tryton.
+# This file is part of project_task_invoice module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 
@@ -36,6 +36,10 @@ class Work:
             cls.party.on_change_with = []
         cls.party.on_change_with.append('parent')
 
+        if hasattr(cls, 'invoice_standalone'):
+            cls.invoice_standalone.states['invisible'] = (
+                Eval('invoice_method') == 'manual')
+
         cls._buttons.update({
                 'invoice': {
                     'invisible': (Eval('project_invoice_method', 'manual')
@@ -60,18 +64,3 @@ class Work:
         if self.project_invoice_method:
             return self.project_invoice_method
         return res
-
-    def _get_lines_to_invoice(self, test=None):
-        "Return lines for work and children"
-        lines = []
-        if test is None:
-            test = self._test_group_invoice()
-        lines += getattr(self, '_get_lines_to_invoice_%s' %
-            self.invoice_method)()
-
-        for children in self.children:
-            if children.type == 'project':
-                if test != children._test_group_invoice():
-                    continue
-            lines += children._get_lines_to_invoice(test=test)
-        return lines
