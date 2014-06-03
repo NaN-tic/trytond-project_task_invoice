@@ -1,7 +1,7 @@
 # This file is part of project_task_invoice module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-
+from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
@@ -32,10 +32,6 @@ class Work:
         if 'invisible' in cls.effort.states:
             del cls.effort.states['invisible']
 
-        if not cls.party.on_change_with:
-            cls.party.on_change_with = []
-        cls.party.on_change_with.append('parent')
-
         if hasattr(cls, 'invoice_standalone'):
             cls.invoice_standalone.states['invisible'] = (
                 Eval('invoice_method') == 'manual')
@@ -56,6 +52,7 @@ class Work:
 
         return
 
+    @fields.depends('parent')
     def on_change_with_party(self, name=None):
         return self.get_party()
 
