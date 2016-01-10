@@ -2,11 +2,22 @@
 <!-- This file is part  of Tryton Module project_task_invoice.  The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.ui.view" id="work_view_list2">
+        <record model="ir.ui.view" id="work_view_tree">
             <field name="model">project.work</field>
-            <field name="inherit" ref="project.work_view_list2"/>
-            <field name="name">work_list2</field>
+            <field name="inherit" ref="project.work_view_tree"/>
+            <field name="name">work_list_invoice</field>
         </record>
 
+        <record model="ir.ui.view" id="work_view_list">
+            <field name="model">project.work</field>
+            <field name="inherit" ref="project.work_view_list"/>
+            <field name="name">work_list_invoice</field>
+        </record>
+
+        <record model="ir.ui.view" id="work_view_list_children">
+            <field name="model">project.work</field>
+            <field name="inherit" ref="project.work_view_list_children"/>
+            <field name="name">work_list_invoice</field>
+        </record>
     </data>
 </tryton>
