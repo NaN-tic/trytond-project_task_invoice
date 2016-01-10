@@ -29,8 +29,8 @@ class Work:
             cls.party.depends.append('type')
         if 'parent' not in cls.party.depends:
             cls.party.depends.append('parent')
-        if 'invisible' in cls.effort.states:
-            del cls.effort.states['invisible']
+        if 'invisible' in cls.effort_duration.states:
+            del cls.effort_duration.states['invisible']
 
         if hasattr(cls, 'invoice_standalone'):
             cls.invoice_standalone.states['invisible'] = (
