@@ -5,12 +5,11 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-__metaclass__ = PoolMeta
-
 __all__ = ['Work']
 
 
 class Work:
+    __metaclass__ = PoolMeta
     __name__ = 'project.work'
 
     @classmethod
