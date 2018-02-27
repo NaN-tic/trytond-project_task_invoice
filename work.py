@@ -55,8 +55,8 @@ class Work:
     def on_change_with_party(self, name=None):
         return self.get_party()
 
-    def get_invoice_method(self, name):
-        res = super(Work, self).get_invoice_method(name)
+    def on_change_with_invoice_method(self, name=None):
+        res = super(Work, self).on_change_with_invoice_method(name)
         if self.project_invoice_method:
             return self.project_invoice_method
         return res
