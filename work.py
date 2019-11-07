@@ -50,7 +50,7 @@ class Work(metaclass=PoolMeta):
 
         return
 
-    @fields.depends('parent')
+    @fields.depends('_parent_parent.id', 'parent')
     def on_change_with_party(self, name=None):
         return self.get_party()
 
