@@ -41,18 +41,10 @@ class Work(metaclass=PoolMeta):
                     },
                 })
 
-    def get_party(self):
-        if self.parent and self.parent.party:
-            return self.parent.party.id
-
-        if self.parent:
-            return self.parent.get_project()
-
-        return
-
     @fields.depends('_parent_parent.id', 'parent')
     def on_change_with_party(self, name=None):
-        return self.get_party()
+        if self.parent and self.parent.party:
+            return self.parent.party.id
 
     def on_change_with_invoice_method(self, name=None):
         res = super(Work, self).on_change_with_invoice_method(name)
