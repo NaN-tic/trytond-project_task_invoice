@@ -5,8 +5,6 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 from trytond.pyson import Eval
 
-__all__ = ['Work']
-
 
 class Work(metaclass=PoolMeta):
     __name__ = 'project.work'
