@@ -22,9 +22,9 @@ class Work(metaclass=PoolMeta):
         if not 'required' in cls.party.states:
             cls.party.states['required'] = True
         if 'type' not in cls.party.depends:
-            cls.party.depends.append('type')
+            cls.party.depends.add('type')
         if 'parent' not in cls.party.depends:
-            cls.party.depends.append('parent')
+            cls.party.depends.add('parent')
         if 'invisible' in cls.effort_duration.states:
             del cls.effort_duration.states['invisible']
 
